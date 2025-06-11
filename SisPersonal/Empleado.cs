@@ -10,10 +10,17 @@ namespace EspacioEmpleado
         private double sueldoBasico;
         private Cargos cargo;
 
-        public Empleado(string nombre, string apellido)
+        public Empleado(string nombre, string apellido, DateTime fechaDeNacimiento,
+        char estadoCivil, DateTime fechaDeIngresoEnLaEmpresa, double sueldoBasico, Cargos cargo)
         {
-            this.nombre = nombre;
-            this.apellido = apellido;
+            Nombre = nombre;
+            Apellido = apellido;
+            FechaDeNacimiento = fechaDeNacimiento;
+            EstadoCivil = estadoCivil;
+            FechaDeIngresoEnLaEmpresa = fechaDeIngresoEnLaEmpresa;
+            SueldoBasico = sueldoBasico;
+            Cargo = cargo;
+
         }
 
         public string? Nombre { get => nombre; set => nombre = value; }
@@ -50,7 +57,7 @@ namespace EspacioEmpleado
             DateTime hoy = DateTime.Today;
             int edad = hoy.Year - FechaDeNacimiento.Year;
 
-            if (FechaDeNacimiento < hoy.AddYears(-edad))
+            if (FechaDeNacimiento > hoy.AddYears(-edad))
             {
                 edad--;
             }
@@ -64,7 +71,7 @@ namespace EspacioEmpleado
             DateTime fechaDeJubilacion = fechaDeNacimiento.AddYears(edadJubilacion);
             int aniosParaJubilarse = fechaDeJubilacion.Year - hoy.Year;
 
-            if (hoy < fechaDeJubilacion.AddYears(-aniosParaJubilarse))
+            if (hoy > fechaDeJubilacion.AddYears(-aniosParaJubilarse))
             {
                 aniosParaJubilarse--;
             }
@@ -74,13 +81,13 @@ namespace EspacioEmpleado
 
         public double Salario()
         {
-            double adicional = SueldoBasico;
+            double adicional = 0;
 
             int antiguedad = Antiguedad();
 
             if (1 <= antiguedad && antiguedad <= 20)
             {
-                adicional += SueldoBasico * 0.01;
+                adicional += SueldoBasico * 0.15;
             }
             else
             {
@@ -90,19 +97,15 @@ namespace EspacioEmpleado
                 }
             }
 
-            if (this.Cargo == Cargos.Ingeniero || this.Cargo == Cargos.Especialista)
+            if (Cargo == Cargos.Ingeniero || this.Cargo == Cargos.Especialista)
             {
                 adicional += adicional * 0.5;
             }
 
-            if (this.EstadoCivil == 'C')
+            if (EstadoCivil == 'C')
             {
                 adicional += 150000;
             }
-
-
-            
-
 
             return SueldoBasico + adicional;
         }
